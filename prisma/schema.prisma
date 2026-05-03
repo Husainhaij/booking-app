@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  PROVIDER
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String   // bcrypt hash — never store plain text
+  role      Role     @default(PROVIDER)
+  slug      String   @unique // public booking URL: /[slug]
+  createdAt DateTime @default(now())
+
+  services     Service[]
+  appointments Appointment[]
+
+  @@index([slug])
+}
+
+model Service {
+  id         String   @id @default(cuid())
+  providerId String
+  name       String
+  duration   Int      // minutes — e.g. 30, 60, 90
+  price      Decimal  @db.Decimal(10, 2)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  provider     User          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@index([providerId])
+  @@index([providerId, isActive])
+}
+
+model Appointment {
+  id            String            @id @default(cuid())
+  providerId    String
+  serviceId     String
+  customerName  String
+  customerPhone String
+  startTime     DateTime
+  endTime       DateTime          // always = startTime + service.duration
+  status        AppointmentStatus @default(PENDING)
+  notes         String?
+  createdAt     DateTime          @default(now())
+
+  provider User    @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  service  Service @relation(fields: [serviceId], references: [id])
+
+  // Most common query: provider's appointments for a given day
+  @@index([providerId, startTime])
+  // Filtering by status (e.g. show only CONFIRMED)
+  @@index([providerId, status])
+}

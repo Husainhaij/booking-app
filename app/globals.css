@@ -1,0 +1,24 @@
+
+:root {
+  --c-bg: #f7f6f3; --c-surface: #ffffff; --c-border: #e8e6e0; --c-hover: #f2f0eb;
+  --c-text: #1a1916; --c-muted: #888680; --c-accent: #1a1916;
+  --c-red: #c0392b; --c-red-bg: #fdecea;
+  --c-green: #1a7a42; --c-green-bg: #e6f4ec;
+  --c-amber: #92600a; --c-amber-bg: #fef3e2;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-bg: #141412; --c-surface: #1e1d1a; --c-border: #2e2c28; --c-hover: #242220;
+    --c-text: #f0ede8; --c-muted: #7a7874; --c-accent: #f0ede8;
+    --c-red: #e57373; --c-red-bg: #270e0e;
+    --c-green: #4caf74; --c-green-bg: #0e2417;
+    --c-amber: #f5c842; --c-amber-bg: #261c0a;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--c-bg); font-family: 'Tajawal', system-ui, sans-serif; direction: rtl; -webkit-font-smoothing: antialiased; }
+textarea, input, button { font-family: inherit; }
+a { text-decoration: none; color: inherit; }
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
+input[type=number] { -moz-appearance: textfield; }

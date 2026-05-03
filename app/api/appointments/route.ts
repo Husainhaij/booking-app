@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "لا يمكن الحجز في وقت ماضٍ" }, { status: 400 })
 
   try {
-    const appointment = await prisma.$transaction(async (tx: typeof prisma) => {
+    const appointment = await prisma.$transaction(async (tx: any) => {
       type Row = { id: string }
       const conflicts = await tx.$queryRaw<Row[]>`
         SELECT id FROM "Appointment"

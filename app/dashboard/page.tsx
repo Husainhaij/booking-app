@@ -1,9 +1,8 @@
 ﻿import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth"
-import { prisma } from "@/lib/prisma" import { AppointmentStatus } from "@/lib/types" import { AppointmentStatus } from "@/lib/types" import { AppointmentStatus } from "@/lib/types" import { AppointmentStatus } from "@/lib/types" import { AppointmentStatus } from "@/lib/types" import { AppointmentStatus } from "@/lib/types" import { AppointmentStatus } from "@/lib/types" import { AppointmentStatus } from "@/lib/types"
-import DashboardClient from "@/components/dashboard/DashboardClient"
-
+import { prisma } from "@/lib/prisma"
+import { AppointmentStatus } from "@/lib/types"
 async function getDashboardData(providerId: string) {
   const now       = new Date()
   const todayStart = new Date(now); todayStart.setHours(0,  0,  0, 0)

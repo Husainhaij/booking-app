@@ -1,7 +1,8 @@
-﻿import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { AppointmentStatus } from "@/lib/types"
 import CalendarClient from "@/components/dashboard/CalendarClient"
 
 async function getMonthAppointments(providerId: string, year: number, month: number) {
@@ -12,16 +13,22 @@ async function getMonthAppointments(providerId: string, year: number, month: num
     where: {
       providerId,
       startTime: { gte: start, lte: end },
-      status: { not: "CANCELLED" },
+      status: { not: AppointmentStatus.CANCELLED },
     },
     include: { service: { select: { name: true, duration: true, price: true } } },
     orderBy: { startTime: "asc" },
   })
 
-  type ApptWithService = Awaited<ReturnType<typeof prisma.appointment.findMany>>[number] & { service: { name: string; duration: number; price: { toString(): string } } }
-  return (appointments as ApptWithService[]).map((a) => ({
-    ...a,
-    service: { ...a.service, price: a.service.price.toString() },
+  type RawAppt = (typeof appointments)[number]
+  return appointments.map((a: RawAppt) => ({
+    id: a.id,
+    customerName: a.customerName,
+    customerPhone: a.customerPhone,
+    startTime: a.startTime,
+    endTime: a.endTime,
+    status: a.status as unknown as AppointmentStatus,
+    notes: a.notes,
+    service: { name: a.service.name, duration: a.service.duration, price: a.service.price.toString() },
   }))
 }
 
@@ -44,5 +51,3 @@ export default async function CalendarPage() {
     />
   )
 }
-
-

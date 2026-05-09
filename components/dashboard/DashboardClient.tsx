@@ -1,10 +1,11 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import Link from "next/link"
-import { AppointmentStatus } from "@/lib/types"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+type AppointmentStatus = "PENDING" | "CONFIRMED" | "CANCELLED"
 
 type Appointment = {
   id: string
@@ -94,7 +95,7 @@ function AppointmentRow({
     }
   }
 
-  const isPending = appt.status === AppointmentStatus.PENDING
+  const isPending = appt.status === "PENDING"
 
   return (
     <div style={{
@@ -148,7 +149,7 @@ function AppointmentRow({
         {isPending && (
           <>
             <button
-              onClick={() => updateStatus(AppointmentStatus.CONFIRMED)}
+              onClick={() => updateStatus("CONFIRMED")}
               disabled={loading}
               style={{
                 fontSize: 12, fontWeight: 600,
@@ -161,7 +162,7 @@ function AppointmentRow({
               تأكيد
             </button>
             <button
-              onClick={() => updateStatus(AppointmentStatus.CANCELLED)}
+              onClick={() => updateStatus("CANCELLED")}
               disabled={loading}
               style={{
                 fontSize: 12, fontWeight: 600,
@@ -323,5 +324,3 @@ export default function DashboardClient({ providerName, providerSlug, appointmen
     </>
   )
 }
-
-

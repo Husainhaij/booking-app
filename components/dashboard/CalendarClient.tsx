@@ -1,10 +1,11 @@
-﻿"use client"
+"use client"
 
 import { useState, useCallback } from "react"
 import Link from "next/link"
-import { AppointmentStatus } from "@/lib/types"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+type AppointmentStatus = "PENDING" | "CONFIRMED" | "CANCELLED"
 
 type Appointment = {
   id: string
@@ -220,7 +221,7 @@ function DayPanel({
                   {isPending && (
                     <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
                       <button
-                        onClick={() => updateStatus(appt.id, AppointmentStatus.CONFIRMED)}
+                        onClick={() => updateStatus(appt.id, "CONFIRMED")}
                         disabled={isUpdating}
                         style={{
                           flex: 1, padding: "8px 0", borderRadius: 8,
@@ -233,7 +234,7 @@ function DayPanel({
                         {isUpdating ? "..." : "تأكيد"}
                       </button>
                       <button
-                        onClick={() => updateStatus(appt.id, AppointmentStatus.CANCELLED)}
+                        onClick={() => updateStatus(appt.id, "CANCELLED")}
                         disabled={isUpdating}
                         style={{
                           flex: 1, padding: "8px 0", borderRadius: 8,
@@ -514,5 +515,3 @@ export default function CalendarClient({
     </>
   )
 }
-
-
